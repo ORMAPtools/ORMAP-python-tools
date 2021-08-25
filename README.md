@@ -7,11 +7,14 @@ Tested with ArcGIS Pro 2.8.2 / Python 3.7.10
 
 **ormap_toolbox.pyt** - This is the Python toolbox; it will show up in ArcGIS as a toolbox.
 
-**print_tool.py** - This is a class defining a tool for preparing taxmaps.
+**print_tool.py** - Exports a taxmap as a PDF.
 
-**print_taxmap.py** - This does not really do any printing, it exports a PDF.
+**zoom_tool.py** - Changes the extent in the current map to a taxmap.
 
-**zoom_taxmap.py** - Changes the extent in the current map to a taxmap.
+**hello_toolbox.pyt** - Demo python toolbox
+
+There are currently some other files in the repo that got pulled
+along from earlier work done by other people including zoom_script_tool.py and zoom_tool_ormap.py.
 
 ## Unit Tests
 
