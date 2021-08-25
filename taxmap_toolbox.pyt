@@ -5,7 +5,7 @@ Python Toolbox for taxmap production
 """
 import arcpy
 
-__version__ = "2021-07-16.0"
+__version__ = "2021-08-24.0"
 
 # Import all the tool classes that will be included in this toolbox.
 #from export_tool import ExportToPDF_tool
@@ -19,7 +19,7 @@ importlib.reload(zoom_tool)
 class Toolbox(object):
     def __init__(self):
         """Define the toolbox (the name of the toolbox is the name of this .pyt file)."""
-        self.description = """Sample toolbox containing sample tools."""
+        self.description = """Taxmap Production Tools."""
 
         self.label = "Taxmap Production Tools"
         self.alias = "TaxmapToolbox"  # no special characters including spaces!

@@ -3,7 +3,10 @@ This is the simplest python toolbox I could make, to help test your set up.
 
 @author: Brian Wilson <brian@wildsong.biz>
 """
+import os
 import arcpy
+
+__version__ = '2021-08-24.0'
 
 class Toolbox(object):
     def __init__(self):
@@ -34,7 +37,13 @@ class Hello_Tool(object):
     
     def execute(self, parameters, messages):
         messages.addMessage("Hello, ArcGIS!")
+        messages.addMessage("Version: %s" % __version__)
+        
+        messages.addMessage("Current system environment settings:")
+        for var in os.environ:
+            messages.addMessage("%s : %s" % (var, os.environ.get(var)))
         return
+
 
 # Unit test
 if __name__ == "__main__":

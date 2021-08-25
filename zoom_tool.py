@@ -11,19 +11,15 @@ Read this!
   https://proceedings.esri.com/library/userconf/devsummit19/papers/DevSummitPS_51.pdf
 
 """
+import os
 import arcpy
 
-__version__ = '2021-JUL-19.3'
+__version__ = '2021-08-24.4'
 
 class Zoom(object):
     """This class has the methods you need to define
        to use your code as an ArcGIS Python Tool."""
    
-    taxmap = None
-    mapindex = None
-    mapindex_path = 'C:/Users/bwilson/source/repos/ORMAP-ParcelFabric/ClatsopCounty_NO_PF/cc-gis.sde/Sandbox.dbo.mapindex'
-    taxlot_path = 'C:/Users/bwilson/source/repos/ORMAP-ParcelFabric/ClatsopCounty_NO_PF/cc-gis.sde/Sandbox.dbo.taxlots'
-
     # chose the field to use as a taxmap index
     # in my data, I have mapnumber in every parcel so I use it
     indexfield = 'mapnumber' # has dots like "4.9.27"
@@ -39,15 +35,39 @@ class Zoom(object):
 
         arcpy.AddMessage("Zoom version %s" % __version__)
 
-        # Load a list of pages
-        n=arcpy.da.TableToNumPyArray(self.mapindex_path, self.indexfield)
-        self.page_list = [tuple[0] for tuple in n]
-
-        self.aprx = None
+        # get the current map
         try:
-            self.aprx = arcpy.mp.ArcGISProject("CURRENT")
+            self.aprx = arcpy.mp.ArcGISProject('CURRENT')
+        except OSError as e:
+            # FIXME
+            aprxfile="C:\\Users\\bwilson\\source\\ORMAP\\ORMAP-ParcelFabric\\ClatsopCounty_NO_PF\\ClatsopCounty_NO_PF.aprx"
+            self.aprx = arcpy.mp.ArcGISProject(aprxfile)
+
+        map = self.aprx.activeMap
+        if not map:
+            map = self.aprx.listMaps('MapView')[0]
+
+        mapindex = map.listLayers('MapIndex')[0]
+        datasource = mapindex.dataSource
+        connection = mapindex.connectionProperties
+
+        taxlot   = map.listLayers('Taxlots')[0]
+
+        # FIXME
+#        workspace = arcpy.env['workspace']
+        workspace = "C:\\Users\\bwilson\\source\\ORMAP\\ORMAP-ParcelFabric\\ClatsopCounty_NO_PF\\cc-gis.sde"
+        arcpy.AddMessage("Workspace is %s" % workspace)
+        self.mapindex_path = os.path.join(workspace, 'Sandbox.DBO.mapindex')
+        self.taxlots_path = os.path.join(workspace, 'Sandbox.DBO.taxlots')
+
+        # Load a list of pages
+        self.page_list = []
+        try:
+            n = arcpy.da.TableToNumPyArray(self.mapindex_path, self.indexfield)
+            self.page_list = [tuple[0] for tuple in n]
         except Exception as e:
-            print(e)
+            arcpy.AddMessage("Can't access the data. " + str(e))
+
              
     def getParameterInfo(self):
         """Define parameter definitions.
@@ -61,7 +81,8 @@ Refer to https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python
             direction="Input" # Input|Output
         )
         page.filter.list = self.page_list
-        page.value = self.page_list[0]
+        if len(self.page_list)>0:
+            page.value = self.page_list[0]
 
         # params[1]
         taxlot = arcpy.Parameter(name="taxlot", 
@@ -164,12 +185,14 @@ Refer to https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python
         try:
             row = arcpy.da.SearchCursor(self.mapindex_path, ['mapscale', 'SHAPE@'], query).next()
             arcpy.AddMessage("Features selected by \"%s\": %s" % (query, row))
-            mapscale = row[0]
-            extent   = row[1].extent
         except Exception as e:
-            arcpy.AddError("Can't find that taxmap. %s" % e)
-        view.camera.setExtent(extent)
+            arcpy.AddMessage("Can't find feature. \"%s\" Error: \"%s\"" % (query, e))
+            return
 
+        mapscale = row[0]
+        extent   = row[1].extent
+
+        view.camera.setExtent(extent)
         return
     
     def findtaxmap(self, maptaxlot):
@@ -180,7 +203,8 @@ Refer to https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python
             arcpy.AddMessage("Features selected by \"%s\": %s" % (query, row))
             mapnumber = row[0]
         except Exception as e:
-            arcpy.AddError("Can't find that taxmap. %s" % e)
+            arcpy.AddMessage("Can't find that taxmap \"%s\". %s" % (self.mapindex_path, e))
+
         return mapnumber
 
 # =============================================================================
@@ -191,7 +215,7 @@ if __name__ == "__main__":
         def addMessage(self, message):
             print(message)
 
-    egdb = "C:/Users/bwilson/source/repos/ORMAP-ParcelFabric/ClatsopCounty_NO_PF/cc-gis.sde"
+    egdb = "C:\\Users\\bwilson\\source\\ORMAP\\ORMAP-ParcelFabric\\ClatsopCounty_NO_PF\\cc-gis.sde"
     assert arcpy.Exists(egdb)
     arcpy.env['workspace'] = egdb
     fc = "Clatsop.DBO.mapindex"

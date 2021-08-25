@@ -1,8 +1,7 @@
 # ORMAP-python-tools
 ArcGIS Python Toolbox for ORMAP
 
-Tested with ArcGIS Pro 2.8 / Python 3.7.10
-
+Tested with ArcGIS Pro 2.8.2 / Python 3.7.10
 
 ## Files
 
