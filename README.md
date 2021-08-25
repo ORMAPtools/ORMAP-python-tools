@@ -16,6 +16,17 @@ Tested with ArcGIS Pro 2.8.2 / Python 3.7.10
 There are currently some other files in the repo that got pulled
 along from earlier work done by other people including zoom_script_tool.py and zoom_tool_ormap.py.
 
+### Zoom
+
+Taxmap page index -- zoom current map to taxmap
+
+There is an option set by default, "Zoom now". When it's set,
+you select a page and the map should immediately zoom.
+
+If you turn off "Zoom now" then the map zoom won't happen until you click on the "Run" button.
+
+Taxlot number -- This is not working yet.
+
 ## Unit Tests
 
 There is a unit test in each python file. This means you can develop the code in that file independently, running it in a debugger and confirming it does what you expect before putting together all the pieces.
@@ -48,6 +59,10 @@ I add *.pyt: python.
 Set the version using Ctl-Shift-P Python: Select interpreter.
 When you want to test with a different version of Python you will have to do
 this again.
+
+### Customizing the Quick Access ribbon
+
+https://pro.arcgis.com/en/pro-app/latest/help/analysis/geoprocessing/basics/customize-arcgis-pro-with-geoprocessing-tools.htm
 
 ## Resources
 
