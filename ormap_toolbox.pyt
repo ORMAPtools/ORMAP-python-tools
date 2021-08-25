@@ -1,5 +1,5 @@
 """
-Python Toolbox for taxmap production
+Python Toolbox for ORMAP map production
 
 @author: Brian Wilson <brian@wildsong.biz>
 """
@@ -19,11 +19,11 @@ importlib.reload(zoom_tool)
 class Toolbox(object):
     def __init__(self):
         """Define the toolbox (the name of the toolbox is the name of this .pyt file)."""
-        self.description = """Taxmap Production Tools."""
+        self.description = """ORMAP Map Production Tools."""
 
-        self.label = "Taxmap Production Tools"
-        self.alias = "TaxmapToolbox"  # no special characters including spaces!
-        self.description = """Taxmap Production Tools"""
+        self.label = "ORMAP Map Production Tools"
+        self.alias = "ORMAPToolbox"  # no special characters including spaces!
+        self.description = """ORMAP Map Production Tools"""
 
         # List of tool classes associated with this toolbox
         self.tools = [
@@ -48,7 +48,7 @@ def list_tools():
 if __name__ == "__main__":
     # Running this as a standalone script lists information about the toolbox and each tool.
     # It turns out that it runs when you load the toolbox (or refresh it) in ArcGIS Pro, too.
-    print("taxmap_toolbox version", __version__)
+    print("ormap_toolbox version", __version__)
     list_tools()
     
 # That's all!
