@@ -20,13 +20,10 @@ along from earlier work done by other people including zoom_script_tool.py and z
 
 There is a unit test in each python file. This means you can develop the code in that file independently, running it in a debugger and confirming it does what you expect before putting together all the pieces.
 
-So for example, you can start by testing field_update_code.py,
-and once you are satisfied it runs, move on to field_update_tool.py,
-and then finally run python_toolbox.pyt as a standalone script.
+So for example, you can start by testing zoom_tool.py,
+and then run ormap_toolbox.pyt as a standalone script.
 
-Of course, you could run each from a command line, but you can run it in
-Visual Studio Code and watch its operation in the debugger, executing
-one line at a time.
+Of course, you could run each from a command line, but you can run it in Visual Studio Code and watch its operation in the debugger, executing one line at a time.
 
 ## Visual Studio Code
 
@@ -63,8 +60,4 @@ May 2018 video: [Buillding Geoprocessing Tools With Python: Getting Started](htt
 [Defining parameter data types in a python toolbox](https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defining-parameter-data-types-in-a-python-toolbox.htm)
 
 [Controlling the progress dialog box](https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/controlling-the-progress-dialog-box.htm)
-
-
-
-
 
