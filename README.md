@@ -3,6 +3,12 @@ ArcGIS Python Toolbox for ORMAP
 
 Tested with ArcGIS Pro 2.8.2 / Python 3.7.10
 
+## To do
+
+Currently there are a bunch of hardcodes tying the zoom tool
+to Clatsop County and me (bwilson). These obviously need to be 
+removed.
+
 ## Files
 
 **ormap_toolbox.pyt** - This is the Python toolbox; it will show up in ArcGIS as a toolbox.
