@@ -27,6 +27,13 @@ If you turn off "Zoom now" then the map zoom won't happen until you click on the
 
 Taxlot number -- This is not working yet.
 
+#### Debugging
+
+Currently the zoom tool is set up to redirect "print" output to a file C:\TEMP\zoom.txt and I normally run "tail -f zoom.out" in a bash shell to watch it as the tool executes. arcpy.AddMessage
+does not help because the messages are only visible when the tool
+completes, and since you don't have to Run the tool it will never
+generate a message log...
+
 ## Unit Tests
 
 There is a unit test in each python file. This means you can develop the code in that file independently, running it in a debugger and confirming it does what you expect before putting together all the pieces.
