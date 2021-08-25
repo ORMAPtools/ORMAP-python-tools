@@ -12,9 +12,10 @@ Read this!
 
 """
 import os
+import sys
 import arcpy
 
-__version__ = '2021-08-24.4'
+__version__ = '2021-08-25.0'
 
 class Zoom(object):
     """This class has the methods you need to define
@@ -33,7 +34,9 @@ class Zoom(object):
         #self.category = "ORMAP" # Use your own category here, or an existing one.
         #self.stylesheet = "" # I don't know how to use this yet.
 
-        arcpy.AddMessage("Zoom version %s" % __version__)
+        sys.stdout = open("C:\\TEMP\\zoom.txt", "wt+")
+        print("Zoom version %s" % __version__)
+        sys.stdout.flush()
 
         # get the current map
         try:
@@ -111,35 +114,38 @@ Refer to https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python
 
     def updateParameters(self, parameters):
         """ This method is called whenever a parameter has been changed."""
+
         # Did we just get a brand new mapindex feature class?
         #if parameters[1].altered:
         # Yes -- fill in the list
         #    parameters[0].filter.list = ["1", "2", "3"]
 
-        # Did the taxlot number change
-        if (parameters[1].altered and parameters[2].value) or (parameters[2].altered and parameters[2].value): 
-            # Find the taxlot and possibly change the page index
-            try:
-                taxlotvalue = parameters[1].ValueAsText
-                print("taxlot", taxlotvalue)
-                taxmap = self.findtaxmap(taxlotvalue)
-                parameters[0].value = taxmap
-                print("taxlot zoom!!", taxmap)
-                self.zoom(taxmap)
-            except Exception as e:
-                print("Just na.", e)
-            return
-
+        indexvalue = parameters[0].ValueAsText
+        taxlotvalue = parameters[1].ValueAsText
+        print("indexvalue", indexvalue)
+        print("taxlot", taxlotvalue)
+        
         # Did the page index change? Is "zoom now" set?
         #   or
         # Did the "zoom now" flag become True?
         if (parameters[0].altered and parameters[2].value) or (parameters[2].altered and parameters[2].value): 
             try:
-                indexvalue = parameters[0].ValueAsText
-                print("taxmap zoom!!", indexvalue)
-                self.zoom(indexvalue)
+                if indexvalue: self.zoom(indexvalue)
             except Exception as e:
+                print("zoom to taxmap failed", e)
                 pass
+
+        # Did the taxlot number change
+        if (parameters[1].altered and parameters[2].value) or (parameters[2].altered and parameters[2].value): 
+            # Find the taxlot and possibly change the page index
+            try:
+                taxmap = self.findtaxmap(taxlotvalue)
+                parameters[0].value = taxmap
+                print("taxlot zoom to ", taxmap)
+                self.zoom(taxmap)
+            except Exception as e:
+                print("Zoom to taxlot failed.", e)
+            return
 
         return
 
@@ -150,12 +156,16 @@ Refer to https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python
 
     def execute(self, parameters, messages):
         indexvalue = parameters[0].value
+        if not indexvalue:
+            arcpy.AddError("No index value was set.")
         print("zoom!!", indexvalue)
         self.zoom(indexvalue)
         return
 
     def zoom(self, indexvalue):
         # Do I need to convert a scale to a zoom level?
+
+        arcpy.AddMessage("Zoom to %s" % indexvalue)
 
         try:
             view = self.aprx.activeView
